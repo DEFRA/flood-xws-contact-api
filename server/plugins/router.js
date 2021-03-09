@@ -1,6 +1,5 @@
 const routes = [].concat(
-  require('../routes/subscribe'),
-  require('../routes/unsubscribe')
+  require('../routes/subscriptions')
 )
 
 module.exports = {
