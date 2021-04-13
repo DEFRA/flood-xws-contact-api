@@ -1,7 +1,10 @@
 const joi = require('joi')
 
 module.exports = {
+  contactId: joi.string().guid().required(),
+  subscriptionId: joi.string().guid().required(),
   address: joi.string().required(),
-  topics: joi.array().items(joi.string().required()).required(),
-  channelType: joi.string().allow('SMS', 'EMAIL', 'VOICE').required()
+  channelName: joi.string().allow('sms', 'email', 'voice').required(),
+  areaCode: joi.string().required(),
+  wnlif: joi.boolean().required()
 }

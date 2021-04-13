@@ -7,7 +7,9 @@ const schema = joi.object().keys({
   env: joi.string().valid(...envs).default(envs[0]),
   host: joi.string().hostname().required(),
   port: joi.number().default(3000),
-  pinpointApplicationId: joi.string().required()
+  contactGetUrl: joi.string().required(),
+  subscriptionPostUrl: joi.string().required()
+
 })
 
 // Build config
@@ -15,7 +17,8 @@ const config = {
   env: process.env.ENV,
   host: process.env.HOST,
   port: process.env.PORT,
-  pinpointApplicationId: process.env.PINPOINT_APPLICATION_ID
+  contactGetUrl: process.env.CONTACT_GET_URL,
+  subscriptionPostUrl: process.env.SUBSCRIPTION_POST_URL
 }
 
 // Validate config

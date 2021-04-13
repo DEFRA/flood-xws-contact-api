@@ -14,10 +14,12 @@
   "dependencies": {
     "@hapi/boom": "9.1.1",
     "@hapi/hapi": "20.1.0",
+    "@hapi/wreck": "^17.1.0",
     "aws-sdk": "2.855.0",
-    "xws-shared": "github:NeXt-Warning-System/common",
     "dotenv": "8.2.0",
-    "hapi-pino": "8.3.0"
+    "hapi-pino": "8.3.0",
+    "pg": "^8.5.1",
+    "xws-shared": "github:NeXt-Warning-System/common"
   },
   "devDependencies": {
     "@hapi/code": "8.0.2",

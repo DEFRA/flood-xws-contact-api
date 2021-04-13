@@ -1,98 +1,56 @@
+const Wreck = require('@hapi/wreck')
+const interpolate = require('xws-shared/util/interpolate')
+
 const joi = require('joi')
 const schema = require('../lib/schema')
-const getSubscriptions = require('../lib/get-subscriptions')
-const deleteSubscriptions = require('../lib/delete-subscriptions')
-const updateSubscriptions = require('../lib/update-subscriptions')
+const { contactGetUrl, subscriptionPostUrl } = require('../config.js')
+
+async function contactExists (contactId) {
+  try {
+    const url = interpolate(contactGetUrl, { contactId })
+    const res = await Wreck.request('HEAD', url)
+    return res.statusCode === 200
+  } catch (error) {
+    return false
+  }
+}
 
 module.exports = [
-  {
-    method: 'GET',
-    path: '/subscriptions',
-    handler: async (request, h) => {
-      const { address, channelType } = request.query
-
-      const result = await getSubscriptions(address, channelType)
-
-      return {
-        result
-      }
-    },
-    options: {
-      validate: {
-        query: joi.object().keys({
-          address: schema.address,
-          channelType: schema.channelType
-        })
-      },
-      description: 'Get subscriptions for a given address/channel'
-    }
-  },
   {
     method: 'POST',
     path: '/subscriptions',
     handler: async (request, h) => {
-      const { address, channelType, topics } = request.payload
+      const { contactId, areaCode, channelName, wnlif } = request.payload
 
-      const result = await updateSubscriptions(address, channelType, topics)
+      if (!await contactExists(contactId)) {
+        throw Error(`contact ${contactId} does not exist`)
+      }
 
-      return {
-        result
+      // Do other stuff here: audit subscriptions, raise event, send welcome email
+
+      const postData = {
+        contactId,
+        areaCode,
+        channelName,
+        wnlif
+      }
+      try {
+        const { res } = await Wreck.post(subscriptionPostUrl, { payload: postData })
+        return res.statusCode
+      } catch (error) {
+        console.log({ error })
       }
     },
     options: {
       validate: {
         payload: joi.object().keys({
-          address: schema.address,
-          channelType: schema.channelType,
-          topics: schema.topics
+          contactId: schema.contactId,
+          channelName: schema.channelName,
+          areaCode: schema.areaCode,
+          wnlif: schema.wnlif
         })
       },
       description: 'Create subscriptions for a given address/channel'
-    }
-  },
-  {
-    method: 'PUT',
-    path: '/subscriptions',
-    handler: async (request, h) => {
-      const { address, channelType, topics } = request.payload
-
-      const result = await updateSubscriptions(address, channelType, topics)
-
-      return {
-        result
-      }
-    },
-    options: {
-      validate: {
-        payload: joi.object().keys({
-          address: schema.address,
-          channelType: schema.channelType,
-          topics: schema.topics
-        })
-      },
-      description: 'Update subscriptions for a given address/channel'
-    }
-  },
-  {
-    method: 'DELETE',
-    path: '/subscriptions',
-    handler: async (request, h) => {
-      const { address, channelType } = request.payload
-
-      const result = await deleteSubscriptions(address, channelType)
-
-      return {
-        result
-      }
-    },
-    options: {
-      validate: {
-        payload: joi.object().keys({
-          address: schema.address,
-          channelType: schema.channelType
-        })
-      },
-      description: 'Delete all subscriptions for a given address/channel'
     }
   }
 ]
