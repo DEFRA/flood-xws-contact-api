@@ -3,7 +3,7 @@ const getEndpointFromAddress = require('./get-endpoint-from-address')
 const pinpointApplicationId = process.env.PINPOINT_APPLICATION_ID
 const pinpoint = new AWS.Pinpoint()
 
-async function updateEndpoint (address, channelType, topics) {
+async function updateEndpoint (address, channelType, lists) {
   const endpointId = getEndpointFromAddress(address, channelType)
 
   const params = {
@@ -46,7 +46,7 @@ async function updateEndpoint (address, channelType, topics) {
       //   OptOut: 'STRING_VALUE',
       //   RequestId: 'STRING_VALUE',
       User: {
-        UserAttributes: { topics },
+        UserAttributes: { lists },
         UserId: endpointId
       }
     }

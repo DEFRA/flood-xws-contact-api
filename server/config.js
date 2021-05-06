@@ -30,6 +30,6 @@ if (error) {
 }
 
 // Add some helper props
-value.isDev = value.env === 'dev'
+value.isLocal = value.env === 'local'
 
 module.exports = value

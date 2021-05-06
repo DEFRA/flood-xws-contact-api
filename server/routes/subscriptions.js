@@ -3,16 +3,16 @@ const interpolate = require('xws-shared/util/interpolate')
 
 const joi = require('joi')
 const schema = require('../lib/schema')
+const updateEndpoint = require('./lib/update-endpoint')
 const { contactGetUrl, subscriptionPostUrl } = require('../config.js')
 
-async function contactExists (contactId) {
-  try {
-    const url = interpolate(contactGetUrl, { contactId })
-    const res = await Wreck.request('HEAD', url)
-    return res.statusCode === 200
-  } catch (error) {
-    return false
-  }
+async function getContact (contactId) {
+  const url = interpolate(contactGetUrl, { contactId })
+  const response = await Wreck.get(url)
+  const { payload } = response
+  const [contact] = JSON.parse(payload)
+
+  return contact
 }
 
 module.exports = [
@@ -21,12 +21,12 @@ module.exports = [
     path: '/subscriptions',
     handler: async (request, h) => {
       const { contactId, areaCode, channelName, wnlif } = request.payload
-
-      if (!await contactExists(contactId)) {
+      const contact = await getContact(contactId)
+      if (!contact) {
         throw Error(`contact ${contactId} does not exist`)
       }
 
-      // Do other stuff here: audit subscriptions, raise event, send welcome email
+      await updateEndpoint(contact.value, channelName.toUpperCase(), [areaCode])
 
       const postData = {
         contactId,
@@ -34,12 +34,8 @@ module.exports = [
         channelName,
         wnlif
       }
-      try {
-        const { res } = await Wreck.post(subscriptionPostUrl, { payload: postData })
-        return res.statusCode
-      } catch (error) {
-        console.log({ error })
-      }
+      const { res } = await Wreck.post(subscriptionPostUrl, { payload: postData })
+      return res.statusCode
     },
     options: {
       validate: {
