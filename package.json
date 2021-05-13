@@ -26,5 +26,8 @@
     "@hapi/lab": "24.1.1",
     "blipp": "4.0.2",
     "standard": "16.0.3"
+  },
+  "engines": {
+    "node": "12"
   }
 }
