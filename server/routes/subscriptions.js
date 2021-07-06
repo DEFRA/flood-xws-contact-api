@@ -29,7 +29,7 @@ module.exports = [
       try {
         await updateEndpoint(contact.value, channelName.toUpperCase(), [areaCode])
       } catch (error) {
-        request.log({ message: 'Update endpoint failed', error })
+        console.log({ message: 'Update endpoint failed', error })
         return 500
       }
 
