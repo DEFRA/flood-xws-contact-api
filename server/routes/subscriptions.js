@@ -26,7 +26,12 @@ module.exports = [
         throw Error(`contact ${contactId} does not exist`)
       }
 
-      await updateEndpoint(contact.value, channelName.toUpperCase(), [areaCode])
+      try {
+        await updateEndpoint(contact.value, channelName.toUpperCase(), [areaCode])
+      } catch (error) {
+        request.log({ message: 'Update endpoint failed', error })
+        return 500
+      }
 
       const postData = {
         contactId,
