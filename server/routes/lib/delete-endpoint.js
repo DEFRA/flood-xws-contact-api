@@ -1,10 +1,10 @@
 const AWS = require('aws-sdk')
-const getEndpointFromAddress = require('./get-endpoint-from-address')
+// const getEndpointFromAddress = require('./get-endpoint-from-address')
 const pinpointApplicationId = process.env.PINPOINT_APPLICATION_ID
 const pinpoint = new AWS.Pinpoint()
 
-async function deleteEnpoint (address, channelType) {
-  const endpointId = getEndpointFromAddress(address, channelType)
+async function deleteEndpoint (endpointId) {
+  // const endpointId = getEndpointFromAddress(address, channelType)
 
   const params = {
     ApplicationId: pinpointApplicationId,
@@ -18,4 +18,4 @@ async function deleteEnpoint (address, channelType) {
   }
 }
 
-module.exports = deleteEnpoint
+module.exports = deleteEndpoint

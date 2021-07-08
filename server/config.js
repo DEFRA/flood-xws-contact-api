@@ -8,8 +8,10 @@ const schema = joi.object().keys({
   host: joi.string().hostname().required(),
   port: joi.number().default(3000),
   contactGetUrl: joi.string().required(),
-  subscriptionPostUrl: joi.string().required()
-
+  subscriptionGetUrl: joi.string().required(),
+  subscriptionPostUrl: joi.string().required(),
+  subscriptionPatchUrl: joi.string().required(),
+  subscriptionDeleteUrl: joi.string().required()
 })
 
 // Build config
@@ -18,7 +20,10 @@ const config = {
   host: process.env.HOST,
   port: process.env.PORT,
   contactGetUrl: process.env.CONTACT_GET_URL,
-  subscriptionPostUrl: process.env.SUBSCRIPTION_POST_URL
+  subscriptionGetUrl: process.env.SUBSCRIPTION_GET_URL,
+  subscriptionPatchUrl: process.env.SUBSCRIPTION_PATCH_URL,
+  subscriptionPostUrl: process.env.SUBSCRIPTION_POST_URL,
+  subscriptionDeleteUrl: process.env.SUBSCRIPTION_DELETE_URL
 }
 
 // Validate config
