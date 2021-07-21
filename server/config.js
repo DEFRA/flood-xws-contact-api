@@ -1,6 +1,6 @@
 require('dotenv').config()
 const joi = require('joi')
-const envs = ['local', 'sandbox', 'test', 'production']
+const envs = ['local', 'development', 'test', 'production']
 
 // Define config schema
 const schema = joi.object().keys({
@@ -19,11 +19,11 @@ const config = {
   env: process.env.ENV,
   host: process.env.HOST,
   port: process.env.PORT,
-  contactGetUrl: process.env.CONTACT_GET_URL,
-  subscriptionGetUrl: process.env.SUBSCRIPTION_GET_URL,
-  subscriptionPatchUrl: process.env.SUBSCRIPTION_PATCH_URL,
-  subscriptionPostUrl: process.env.SUBSCRIPTION_POST_URL,
-  subscriptionDeleteUrl: process.env.SUBSCRIPTION_DELETE_URL
+  contactGetUrl: `${process.env.CONTACT_RESOURCE}?id=eq.\${contactId}`,
+  subscriptionGetUrl: `${process.env.SUBSCRIPTION_RESOURCE}?id=eq.\${subscriptionId}`,
+  subscriptionPatchUrl: `${process.env.SUBSCRIPTION_RESOURCE}?id=eq.\${subscriptionId}`,
+  subscriptionDeleteUrl: `${process.env.SUBSCRIPTION_RESOURCE}?id=eq.\${subscriptionId}`,
+  subscriptionPostUrl: process.env.SUBSCRIPTION_RESOURCE
 }
 
 // Validate config
