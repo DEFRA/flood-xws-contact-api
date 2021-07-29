@@ -29,17 +29,8 @@ variables:
   HOST: 0.0.0.0
   CONTACT_RESOURCE: "http://xws-contact-api.flood-xws-contact.local:3000/contact"
   SUBSCRIPTION_RESOURCE: "http://xws-contact-api.flood-xws-contact.local:3000/subscription"
-  PINPOINT_APPLICATION_ID: "59dd67208224475a86459036069f4766"
-  AWS_REGION: "eu-west-2"
 
-#variables:                    # Pass environment variables as key value pairs.
-#  LOG_LEVEL: info
-
-secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
-  AWS_ACCESS_KEY_ID: /flood-xws-contact/test/xws-subscription-api/AWS_ACCESS_KEY_ID
-  AWS_SECRET_ACCESS_KEY: /flood-xws-contact/test/xws-subscription-api/AWS_SECRET_ACCESS_KEY
-
-
+# secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
 #  GITHUB_TOKEN: GITHUB_TOKEN  # The key is the name of the environment variable, the value is the name of the SSM parameter.
 
 # You can override any of the values defined above by environment.

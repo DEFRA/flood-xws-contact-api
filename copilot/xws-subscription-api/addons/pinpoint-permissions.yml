@@ -1,0 +1,77 @@
+# You can use any of these parameters to create conditions or mappings in your template.
+Parameters:
+  App:
+    Type: String
+    Description: Your application's name.
+  Env:
+    Type: String
+    Description: The environment name your service, job, or workflow is being deployed to.
+  Name:
+    Type: String
+    Description: The name of the service, job, or workflow being deployed.
+
+Resources:
+  pinpointApp:
+    Type: AWS::Pinpoint::App
+    Properties:
+      Name: !Sub ${App}-${Env}-${Name}
+
+  pinpointSmsChannel:
+    Type: AWS::Pinpoint::SMSChannel
+    Properties:
+      ApplicationId: !Ref pinpointApp
+      Enabled: true
+
+  pinpointEmailChannel:
+    Type: AWS::Pinpoint::EmailChannel
+    Properties:
+      ApplicationId: !Ref pinpointApp
+      Enabled: true
+      FromAddress: getfloodwarnings@gmail.com
+      Identity: arn:aws:ses:eu-west-2:190133113546:identity/getfloodwarnings@gmail.com
+
+
+  # 1. In addition to your resource, if you need to access the resource from your ECS task
+  # then you need to create an AWS::IAM::ManagedPolicy that holds the permissions for your resource.
+  #
+  # For example, below is a sample policy for MyTable:
+  PinpointAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: PinpointActions
+            Effect: Allow
+            Action:
+              - mobiletargeting:GetApps
+            Resource:
+              - !Sub
+                - '${pinpointAppArn}'
+                - { pinpointAppArn: !GetAtt pinpointApp.Arn }
+          - Sid: PinpointEndpointActions
+            Effect: Allow
+            Action:
+              - mobiletargeting:GetEndpoint
+              - mobiletargeting:UpdateEndpoint
+              - mobiletargeting:DeleteEndpoint
+            Resource:
+              - !Sub
+                - '${pinpointAppArn}/endpoints/*'
+                - { pinpointAppArn: !GetAtt pinpointApp.Arn }
+
+
+
+Outputs:
+  # 2. If you want to inject a property of your resource as an environment variable to your ECS task,
+  # then you need to define an output for it.
+  #
+  # For example, the output MyTableName will be injected in capital snake case, MY_TABLE_NAME, to your task.
+  PinpointApplicationId:
+    Description: "Pinpoint Application Id"
+    Value: !Ref pinpointApp
+
+  # 1. You also need to output the IAM ManagedPolicy so that Copilot can inject it to your ECS task role.
+  PinpointAccessPolicyArn:
+    Description: "The ARN of the ManagedPolicy to attach to the task role."
+    Value: !Ref PinpointAccessPolicy
