@@ -16,7 +16,7 @@ const schema = joi.object().keys({
 
 // Build config
 const config = {
-  env: process.env.ENV,
+  env: process.env.NODE_ENV,
   host: process.env.HOST,
   port: process.env.PORT,
   contactGetUrl: `${process.env.CONTACT_RESOURCE}?id=eq.\${contactId}`,
