@@ -1,0 +1,31 @@
+# The manifest for the "xws-subscription-api" service.
+# Read the full specification for the "Backend Service" type at:
+#  https://aws.github.io/copilot-cli/docs/manifest/backend-service/
+
+# Your service name will be used in naming your resources like log groups, ECS services, etc.
+name: xws-subscription-api
+type: Backend Service
+
+# Your service does not allow any traffic.
+
+# Configuration for your containers and service.
+image:
+  # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/backend-service/#image-build
+  build: Dockerfile
+  port: 3003
+
+cpu: 256       # Number of CPU units for the task.
+memory: 512    # Amount of memory in MiB used by the task.
+count: 1       # Number of tasks that should be running in your service.
+exec: true     # Enable running commands in your container.
+
+variables:
+  PORT: 3003
+  HOST: 0.0.0.0
+
+environments:
+  test:
+    variables:
+      NODE_ENV: test
+      CONTACT_RESOURCE: "http://xws-contact-db.test.flood-xws-contact.local:3000/contact"
+      SUBSCRIPTION_RESOURCE: "http://xws-contact-db.test.flood-xws-contact.local:3000/subscription"
