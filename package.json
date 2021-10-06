@@ -1,7 +1,7 @@
 {
-  "name": "contact-api",
+  "name": "subscription-api",
   "version": "0.0.1",
-  "description": "XWS Contact sub-system API",
+  "description": "XWS subscription sub-system API",
   "main": "index.js",
   "scripts": {
     "lint": "standard",
