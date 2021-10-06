@@ -143,8 +143,13 @@ module.exports = [
         channelName,
         wnlif
       }
-      const { res } = await Wreck.post(subscriptionPostUrl, { payload: postData })
-      return res.statusCode
+      try {
+        const { res } = await Wreck.post(subscriptionPostUrl, { payload: postData })
+        return res.statusCode
+      } catch (error) {
+        console.log({ message: 'Subscription Post Error', error, postData })
+        return 500
+      }
     },
     options: {
       validate: {
