@@ -145,6 +145,7 @@ module.exports = [
       }
       try {
         await Wreck.post(subscriptionPostUrl, { payload: postData })
+        console.log({ message: 'Subscription Posted', postData })
       } catch (error) {
         console.log({ message: 'Subscription Post Error', error, postData })
         return h.response({}).code(500)
