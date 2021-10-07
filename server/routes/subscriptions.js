@@ -125,6 +125,7 @@ module.exports = [
     path: '/subscription',
     handler: async (request, h) => {
       const { contactId, areaCode, channelName, wnlif } = request.payload
+      console.log({ contactId, areaCode, channelName, wnlif })
       const contact = await getContact(contactId)
       if (!contact) {
         throw Error(`contact ${contactId} does not exist`)
