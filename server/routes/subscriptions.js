@@ -145,8 +145,9 @@ module.exports = [
         wnlif
       }
       try {
+        console.log({ message: 'Subscription Posting', postData })
         await Wreck.post(subscriptionPostUrl, { payload: postData })
-        console.log({ message: 'Subscription Posted', postData })
+        console.log({ message: 'Subscription Posted' })
       } catch (error) {
         console.log({ message: 'Subscription Post Error', error, postData })
         return h.response({}).code(500)
