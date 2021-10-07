@@ -14,11 +14,15 @@ const {
 } = require('../config.js')
 
 async function getContact (contactId) {
-  const url = interpolate(contactGetUrl, { contactId })
-  const response = await Wreck.get(url)
-  const { payload } = response
-  const [contact] = JSON.parse(payload)
-  return contact
+  try {
+    const url = interpolate(contactGetUrl, { contactId })
+    const response = await Wreck.get(url)
+    const { payload } = response
+    const [contact] = JSON.parse(payload)
+    return contact
+  } catch (error) {
+    console.error({ contactGetUrl, error })
+  }
 }
 
 async function getSubscription (subscriptionId) {
